@@ -53,6 +53,33 @@ class PessoaController {
             return res.status(500).json(error.message)
         }
     }
+
+    static async atualizar(req ,res) {
+
+        const { id } = req.params
+        const outraPessoa = req.body
+
+        try {
+            
+            const atualizou = await dataBase.Pessoas.update(outraPessoa,
+            {
+                where: {
+                    id: Number(id)
+                }
+            })
+
+            if (atualizou == 0) {
+
+                return res.status(404).json()
+            }
+
+            return res.status(204).json()
+
+        } catch (error) {
+
+                return res.status(500).json(error.message)
+        }
+    }
 }
 
 module.exports = PessoaController
