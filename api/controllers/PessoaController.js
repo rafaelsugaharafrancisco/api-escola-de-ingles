@@ -85,17 +85,23 @@ class PessoaController {
 
         const { id } = req.params
 
-        const deletou = await dataBase.Pessoas.destroy({
-            where: {
-                id: Number(id)
+        try {
+            const deletou = await dataBase.Pessoas.destroy({
+                where: {
+                    id: Number(id)
+                }
+            })
+    
+            if (deletou == 0) {
+                return res.status(404).json()
             }
-        })
+    
+            return res.status(204).json()
+            
+        } catch (error) {
 
-        if (deletou == 0) {
-            return res.status(404).json()
+            return res.status(500).json(error.message)
         }
-
-        return res.status(204).json()
     }
 }
 
