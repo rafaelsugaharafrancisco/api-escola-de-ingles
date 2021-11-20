@@ -130,6 +130,84 @@ class PessoaController {
 
         }
     }
+
+    static async criarMatricula(req, res) {
+
+        const { estudanteId } = req.params;
+        const matricula = { ...req.body, estudante_id: Number(estudanteId) };
+
+        try {
+
+            const novaMatricula = await dataBase.Matriculas.create(matricula);
+
+            return res.status(201).json(novaMatricula);
+
+        } catch(error) {
+
+            return res.status(500).json(error.message);
+        }
+    }
+
+    static async atualizarMatricula(req, res) {
+
+        const { estudanteId, matriculaId } = req.params;
+        const matricula = req.body;
+
+        try {
+
+            const atualizou = await dataBase.Matriculas.update(matricula, {
+                where: {
+                    id: Number(matriculaId),
+                    estudante_id: Number(estudanteId)
+                }
+            })
+
+            if (atualizou == 0) {
+
+                return res.status(404).json();
+            }
+
+            const matriculaAtualizada = await dataBase.Matriculas.findOne({
+                where: {
+                    id: Number(matriculaId)
+                }
+            });
+
+            return res.status(200).json(matriculaAtualizada);
+
+        } catch (error) {
+
+            return res.status(500).json(error.message);
+
+        }
+    }
+
+    static async removerMatricula(req, res) {
+
+        const { estudanteId, matriculaId } = req.params;
+
+        try {
+
+            const deletou = await dataBase.Matriculas.destroy({
+                where: {
+                    id: Number(matriculaId),
+                    estudante_id: Number(estudanteId)
+                }
+            });
+
+            if (deletou == 0) {
+
+                return res.status(404).json();
+            }
+
+            return res.status(204).json();
+
+        } catch (error) {
+
+            return res.status(500).json(error.message);
+
+        }
+    }
 }
 
 module.exports = PessoaController
