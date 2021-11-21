@@ -1,11 +1,14 @@
 const dataBase = require('../models')
+const pessoaView = require('../dto/pessoa-view')
 
 class PessoaController {
     
     static async obterLista(req, res) {
 
         try {
-            const pessoas = await dataBase.Pessoas.findAll()
+            const pessoas = await dataBase.Pessoas.findAll({
+                attributes: [ 'id', 'nome', 'ativo', 'email' ]
+            })
 
             return res.status(200).json(pessoas)
 
@@ -31,7 +34,7 @@ class PessoaController {
                 return res.status(404).json()
             }
 
-            return res.status(200).json(pessoa)
+            return res.status(200).json(pessoaView(pessoa))
 
         } catch (error) {
 
@@ -46,7 +49,7 @@ class PessoaController {
 
             const novaPessoa = await dataBase.Pessoas.create(pessoa)
             
-            return res.status(201).json(novaPessoa)
+            return res.status(201).json(pessoaView(novaPessoa))
 
         } catch (error) {
 

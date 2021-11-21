@@ -4,7 +4,8 @@
     "password": "root",
     "database": "escola_ingles",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "America/Sao_Paulo"
   },
   "test": {
     "username": "root",
